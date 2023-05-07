@@ -45,9 +45,9 @@ const login = (request, h) => {
     return response;
 }
 
-cosnt register = (requet, h) => {
+const register = (requet, h) => {
     const {email, usrName, password, firstName, lastName, birthday, phoneNum, street, city,
-    province postalCode, paymentmethod, cardNum, expDate} = request.payload;
+    province, postalCode, paymentmethod, cardNum, expDate} = request.payload;
 
     const checkUsrQuery = 'SELECT * FROM customer WHERE cust_email = ?';
     const [exsistingUsr] = await db.query(chackUsrQuery, [email]);
@@ -81,7 +81,7 @@ const getProfile = (request, h) = > {
 
     const [rows] = await db.query(query, [id]);
 
-    if (rows.length === 0) {
+    if (rows.length == 0) {
         const response = h.response({
             status:'fail',
             message:'User not found'
@@ -96,6 +96,32 @@ const getProfile = (request, h) = > {
 
 // TODO: getMovie
 const getMovie = (request, h) {
+    const query = 'SELECT * FROM movies';
+    const [rows] = await db.query(query);
 
+    if (rows.length == 0) {
+        const response = h.response({
+            status: 'fail',
+            message: 'Movies not found'
+        });
+        response.code(404);
+        return response;
+    }
+}
+
+const getMovieDetails = (request, h) {
+    const id = req.params;
+    const query = 'SELECTED * FROM movies where movieID = ?';
+
+    const [rows] = await db.query(query, [id]);
+
+    if (rows.length == 0) {
+        const response = h.response({
+            status: 'fail',
+            message: 'Movies details not found'
+        });
+        response.code(404);
+        return response;
+    }
 }
 
